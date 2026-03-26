@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise AI for Advisory Practices — Prepared for IQVIA CHC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#343CED;--lime:#D8FD49;--cream:#FAFAF7;--text:#1A1A2E;
+  --text2:rgba(26,26,46,0.55);--text3:rgba(26,26,46,0.38);
+  --card-border:rgba(0,0,0,0.07);--radius:14px;--radius-sm:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;background:var(--cream);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.container{max-width:1120px;margin:0 auto;padding:0 28px}
+.eyebrow{font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.section-title{font-size:clamp(1.6rem,3.2vw,2.4rem);font-weight:700;line-height:1.2;margin-bottom:16px;max-width:680px}
+.section-sub{color:var(--text2);font-size:1.05rem;max-width:580px;margin-bottom:48px}
+section{padding:96px 0}
+a{color:var(--blue);text-decoration:none}
+
+/* Reveal animation */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.23,1,.32,1),transform .7s cubic-bezier(.23,1,.32,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}.reveal-d4{transition-delay:.4s}
+
+/* ─── HERO ─── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;padding:120px 28px 80px;background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(52,60,237,.06) 0%,transparent 70%),radial-gradient(ellipse 40% 30% at 70% 60%,rgba(216,253,73,.06) 0%,transparent 70%),var(--cream)}
+.hero .eyebrow{font-size:.75rem;letter-spacing:.15em}
+.hero h1{font-size:clamp(2rem,5vw,3.6rem);font-weight:700;line-height:1.12;max-width:780px;margin:0 auto 24px}
+.hero p.sub{color:var(--text2);font-size:1.1rem;max-width:520px;margin:0 auto 40px}
+.context-pill{display:inline-block;font-size:.78rem;font-weight:500;color:var(--text2);border:1px solid var(--card-border);border-radius:100px;padding:8px 22px;background:#fff}
+.scroll-cue{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);animation:bounce 2.4s infinite}
+.scroll-cue svg{width:28px;height:28px;stroke:var(--text3);stroke-width:2;fill:none}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
+
+/* ─── CHALLENGE CARDS ─── */
+.challenge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.challenge-card{background:#fff;border:1px solid var(--card-border);border-radius:var(--radius);padding:40px 32px 32px;position:relative;transition:transform .3s,border-color .3s,box-shadow .3s}
+.challenge-card:hover{transform:translateY(-4px);border-color:rgba(52,60,237,.25);box-shadow:0 12px 40px rgba(52,60,237,.07)}
+.challenge-num{font-size:4.5rem;font-weight:700;color:rgba(52,60,237,.06);line-height:1;position:absolute;top:16px;right:24px}
+.challenge-card h3{font-size:1.15rem;font-weight:600;margin-bottom:8px}
+.challenge-card p{color:var(--text2);font-size:.95rem}
+
+/* ─── INTELLIGENCE LAYER ─── */
+.intel-section{background:#fff}
+.svg-wrap{width:100%;overflow-x:auto;margin-bottom:48px;border:1px solid var(--card-border);border-radius:var(--radius);padding:12px}
+.svg-wrap svg{display:block;margin:0 auto;width:100%;height:auto;min-width:760px}
+.layer-explain{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+.layer-explain div h4{font-size:1rem;font-weight:600;margin-bottom:6px}
+.layer-explain div p{color:var(--text2);font-size:.92rem}
+
+/* ─── DECISION FLOW ─── */
+.flow-svg-wrap{width:100%;overflow-x:auto;margin-bottom:48px;border:1px solid var(--card-border);border-radius:var(--radius);padding:12px}
+.flow-svg-wrap svg{display:block;margin:0 auto;width:100%;height:auto;min-width:700px}
+.comparison-text{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:8px}
+.comparison-text .col{padding:24px;border-radius:var(--radius-sm);font-size:.92rem;line-height:1.65}
+.comparison-text .col.generic{background:rgba(0,0,0,.03);color:var(--text2)}
+.comparison-text .col.glean{background:rgba(52,60,237,.04);border-top:3px solid;border-image:linear-gradient(90deg,var(--blue),#34C759) 1}
+.comparison-text .col h4{font-size:.95rem;font-weight:600;margin-bottom:10px}
+@media(max-width:640px){.comparison-text{grid-template-columns:1fr}}
+
+/* ─── ACCORDION ─── */
+.accordion{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.acc-card{background:#fff;border:1px solid var(--card-border);border-radius:var(--radius);overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.acc-card:hover,.acc-card.active{border-color:rgba(52,60,237,.2);box-shadow:0 6px 24px rgba(52,60,237,.06)}
+.acc-header{display:flex;align-items:center;gap:14px;padding:22px 28px;cursor:pointer;-webkit-user-select:none;user-select:none}
+.acc-icon{width:40px;height:40px;border-radius:10px;background:rgba(52,60,237,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.acc-icon svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:1.8}
+.acc-label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text3)}
+.acc-title{font-size:1.05rem;font-weight:600}
+.acc-chevron{margin-left:auto;transition:transform .3s;flex-shrink:0}
+.acc-chevron svg{width:18px;height:18px;stroke:var(--text3);fill:none;stroke-width:2}
+.acc-card.active .acc-chevron{transform:rotate(180deg)}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.23,1,.32,1)}
+.acc-card.active .acc-body{max-height:400px}
+.acc-body-inner{padding:0 28px 24px 82px}
+.acc-body-inner p{color:var(--text2);font-size:.93rem;margin-bottom:16px}
+.metric-row{display:flex;gap:24px;flex-wrap:wrap}
+.metric{background:rgba(52,60,237,.04);border-radius:8px;padding:10px 18px}
+.metric strong{font-size:1.1rem;color:var(--blue);display:block;line-height:1.3}
+.metric span{font-size:.78rem;color:var(--text2)}
+
+/* ─── WHY DIFFERENT ─── */
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media(max-width:640px){.diff-grid{grid-template-columns:1fr}}
+.diff-col{padding:32px;border-radius:var(--radius);font-size:.93rem}
+.diff-col.trad{background:rgba(0,0,0,.03);color:var(--text2)}
+.diff-col.glean{background:#fff;border:1px solid var(--card-border);border-top:3px solid;border-image:linear-gradient(90deg,var(--blue),#34C759) 1}
+.diff-col h3{font-size:1.1rem;font-weight:600;margin-bottom:20px;color:var(--text)}
+.diff-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;line-height:1.5}
+.diff-item svg{flex-shrink:0;margin-top:3px}
+
+/* ─── PROOF POINTS ─── */
+.proof-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px}
+.proof-card{background:#fff;border:1px solid var(--card-border);border-radius:var(--radius);padding:32px 28px;text-align:center;transition:transform .3s,border-color .3s,box-shadow .3s}
+.proof-card:hover{transform:translateY(-4px);border-color:rgba(52,60,237,.25);box-shadow:0 12px 40px rgba(52,60,237,.07)}
+.proof-card .num{font-size:2rem;font-weight:700;color:var(--blue);line-height:1.2}
+.proof-card .label{color:var(--text2);font-size:.88rem;margin-top:6px}
+
+/* ─── CTA ─── */
+.cta-section{text-align:center;padding:80px 28px 120px}
+.cta-line{width:80px;height:3px;margin:0 auto 40px;border-radius:2px;background:linear-gradient(90deg,var(--blue),#34C759)}
+.cta-section h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;margin-bottom:14px}
+.cta-section p{color:var(--text2);font-size:1.05rem;max-width:480px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ 1. HERO ════════════════ -->
+<section class="hero">
+  <p class="eyebrow reveal">Enterprise AI for Advisory Practices</p>
+  <h1 class="reveal reveal-d1">Turn your practice's knowledge into its fastest competitive advantage.</h1>
+  <p class="sub reveal reveal-d2">Your best thinking is trapped — in past decks, partner inboxes, and institutional memory that walks out the door every evening.</p>
+  <div class="context-pill reveal reveal-d3">Prepared for IQVIA CHC Advisory · March 2026</div>
+  <div class="scroll-cue" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</section>
+
+<!-- ════════════════ 2. THE ADVISORY CHALLENGE ════════════════ -->
+<section>
+  <div class="container">
+    <p class="eyebrow reveal">The Advisory Challenge</p>
+    <h2 class="section-title reveal">Knowledge is your product. But most of it is invisible.</h2>
+    <p class="section-sub reveal">Advisory practices generate extraordinary intellectual capital on every engagement — then lose most of it to entropy.</p>
+    <div class="challenge-grid">
+      <div class="challenge-card reveal reveal-d1">
+        <span class="challenge-num">01</span>
+        <h3>Engagement Reuse</h3>
+        <p>Prior work product sits in SharePoint folders no one searches. Teams rebuild deliverables that already exist two offices away.</p>
+      </div>
+      <div class="challenge-card reveal reveal-d2">
+        <span class="challenge-num">02</span>
+        <h3>Cross-Geography Gaps</h3>
+        <p>The São Paulo team doesn't know what the London team learned last quarter. Expertise is local; the practice is global.</p>
+      </div>
+      <div class="challenge-card reveal reveal-d3">
+        <span class="challenge-num">03</span>
+        <h3>Speed-to-Insight</h3>
+        <p>Analysts spend 30–40% of project time on information gathering that an indexed knowledge base would make trivial.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ 3. THE INTELLIGENCE LAYER ════════════════ -->
+<section class="intel-section">
+  <div class="container">
+    <p class="eyebrow reveal">The Intelligence Layer</p>
+    <h2 class="section-title reveal">A knowledge graph that understands your practice — not just your files.</h2>
+    <p class="section-sub reveal">Glean connects every system, maps every relationship, and surfaces what matters — with enterprise-grade permissions intact.</p>
+
+    <div class="svg-wrap reveal">
+      <svg viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg" font-family="'DM Sans',system-ui,sans-serif">
+        <defs>
+          <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="var(--blue)" opacity=".5"/></marker>
+          <marker id="ah2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="var(--blue)" opacity=".35"/></marker>
+        </defs>
+
+        <!-- Bottom layer: Connected Systems -->
+        <rect x="20" y="590" width="860" height="72" rx="12" fill="#F3F3F0" stroke="rgba(0,0,0,.07)"/>
+        <text x="40" y="614" font-size="10" font-weight="600" fill="var(--text3)" letter-spacing=".08em" text-transform="uppercase">CONNECTED SYSTEMS</text>
+        <g font-size="11" font-weight="500">
+          <rect x="40" y="624" width="72" height="28" rx="6" fill="#fff" stroke="rgba(0,0,0,.08)"/><text x="76" y="643" text-anchor="middle" fill="var(--text2)">SharePoint</text>
+          <rect x="122" y="624" width="56" height="28" rx="6" fill="#fff" stroke="rgba(0,0,0,.08)"/><text x="150" y="643" text-anchor="middle" fill="var(--text2)">Slack</text>
+          <rect x="188" y="624" width="58" height="28" rx="6" fill="#fff" stroke="rgba(0,0,0,.08)"/><text x="217" y="643" text-anchor="middle" fill="var(--text2)">Teams</text>
+          <rect x="256" y="624" width="74" height="28" rx="6" fill="#fff" stroke="rgba(0,0,0,.08)"/><text x="293" y="643" text-anchor="middle" fill="var(--text2)">Salesforce</text>
+          <rect x="340" y="624" width="56" height="28" rx="6" fill="#fff" stroke="rgba(0,0,0,.08)"/><text x="368" y="643" text-anchor="middle" fill="var(--text2)">Gmail</text>
+          <rect x="406" y="624" width="54" height="28" rx="6" fill="#fff" stroke="rgba(0,0,0,.08)"/><text x="433" y="643" text-anchor="middle" fill="var(--text2)">Drive</text>
+          <rect x="470" y="624" width="44" height="28" rx="6" fill="#fff" stroke="rgba(0,0,0,.08)"/><text x="492" y="643" text-anchor="middle" fill="var(--text2)">Jira</text>
+          <rect x="524" y="624" width="44" height="28" rx="6" fill="#fff" stroke="rgba(0,0,0,.08)"/><text x="546" y="643" text-anchor="middle" fill="var(--text2)">Box</text>
+          <rect x="578" y="624" width="78" height="28" rx="6" fill="#fff" stroke="rgba(0,0,0,.08)"/><text x="617" y="643" text-anchor="middle" fill="var(--text2)">Confluence</text>
+          <rect x="666" y="624" width="84" height="28" rx="6" fill="#fff" stroke="rgba(0,0,0,.08)"/><text x="708" y="643" text-anchor="middle" fill="var(--text2)">ServiceNow</text>
+        </g>
+
+        <!-- Arrows: Systems → Graph -->
+        <line x1="200" y1="590" x2="200" y2="560" stroke="var(--blue)" stroke-width="1.5" opacity=".3" marker-end="url(#ah2)"/>
+        <line x1="450" y1="590" x2="450" y2="560" stroke="var(--blue)" stroke-width="1.5" opacity=".3" marker-end="url(#ah2)"/>
+        <line x1="700" y1="590" x2="700" y2="560" stroke="var(--blue)" stroke-width="1.5" opacity=".3" marker-end="url(#ah2)"/>
+
+        <!-- Middle layer: Knowledge Graph -->
+        <rect x="20" y="170" width="860" height="390" rx="12" fill="#fff" stroke="var(--blue)" stroke-width="1.5" opacity="1"/>
+        <rect x="20" y="170" width="860" height="390" rx="12" fill="rgba(52,60,237,.015)"/>
+        <text x="450" y="200" font-size="11" font-weight="700" fill="var(--blue)" text-anchor="middle" letter-spacing=".14em">KNOWLEDGE GRAPH</text>
+
+        <!-- Column headers -->
+        <text x="175" y="232" font-size="10" font-weight="600" fill="var(--text3)" text-anchor="middle" letter-spacing=".1em">CONTENT</text>
+        <text x="450" y="232" font-size="10" font-weight="600" fill="var(--text3)" text-anchor="middle" letter-spacing=".1em">PEOPLE</text>
+        <text x="730" y="232" font-size="10" font-weight="600" fill="var(--text3)" text-anchor="middle" letter-spacing=".1em">ACTIVITY</text>
+
+        <!-- CONTENT entities -->
+        <rect x="55" y="252" width="240" height="40" rx="8" fill="#F0F1FF" stroke="rgba(52,60,237,.15)"/>
+        <text x="72" y="277" font-size="13">📄</text><text x="92" y="277" font-size="12.5" font-weight="500" fill="var(--text)">Pricing Strategy Deck</text>
+
+        <rect x="55" y="306" width="240" height="40" rx="8" fill="#F0F1FF" stroke="rgba(52,60,237,.15)"/>
+        <text x="72" y="331" font-size="13">📧</text><text x="92" y="331" font-size="12.5" font-weight="500" fill="var(--text)">Client Email Thread</text>
+
+        <rect x="55" y="360" width="240" height="40" rx="8" fill="#F0F1FF" stroke="rgba(52,60,237,.15)"/>
+        <text x="72" y="385" font-size="13">📊</text><text x="92" y="385" font-size="12.5" font-weight="500" fill="var(--text)">LATAM Market Report</text>
+
+        <!-- PEOPLE entities -->
+        <g transform="translate(400,260)">
+          <circle cx="24" cy="20" r="20" fill="rgba(52,60,237,.08)" stroke="rgba(52,60,237,.2)"/>
+          <circle cx="24" cy="14" r="6" fill="var(--blue)" opacity=".4"/>
+          <path d="M12,32 Q12,24 24,24 Q36,24 36,32" fill="var(--blue)" opacity=".25"/>
+          <text x="54" y="25" font-size="12.5" font-weight="500" fill="var(--text)">Partner</text>
+        </g>
+        <g transform="translate(400,314)">
+          <circle cx="24" cy="20" r="20" fill="rgba(52,60,237,.08)" stroke="rgba(52,60,237,.2)"/>
+          <circle cx="24" cy="14" r="6" fill="var(--blue)" opacity=".4"/>
+          <path d="M12,32 Q12,24 24,24 Q36,24 36,32" fill="var(--blue)" opacity=".25"/>
+          <text x="54" y="25" font-size="12.5" font-weight="500" fill="var(--text)">Analyst</text>
+        </g>
+        <g transform="translate(400,368)">
+          <circle cx="24" cy="20" r="20" fill="rgba(52,60,237,.08)" stroke="rgba(52,60,237,.2)"/>
+          <circle cx="24" cy="14" r="6" fill="var(--blue)" opacity=".4"/>
+          <path d="M12,32 Q12,24 24,24 Q36,24 36,32" fill="var(--blue)" opacity=".25"/>
+          <text x="54" y="25" font-size="12.5" font-weight="500" fill="var(--text)">SME</text>
+        </g>
+
+        <!-- ACTIVITY entities -->
+        <rect x="620" y="252" width="230" height="40" rx="8" fill="rgba(52,200,89,.08)" stroke="rgba(52,200,89,.2)"/>
+        <text x="638" y="277" font-size="12.5" font-weight="500" fill="var(--text)">🟢 Client Call Q3</text>
+
+        <rect x="620" y="306" width="230" height="40" rx="8" fill="rgba(52,200,89,.08)" stroke="rgba(52,200,89,.2)"/>
+        <text x="638" y="331" font-size="12.5" font-weight="500" fill="var(--text)">🟢 Peer Review Cycle</text>
+
+        <rect x="620" y="360" width="230" height="40" rx="8" fill="rgba(52,200,89,.08)" stroke="rgba(52,200,89,.2)"/>
+        <text x="638" y="385" font-size="12.5" font-weight="500" fill="var(--text)">🟢 Strategy Workshop</text>
+
+        <!-- Relationship lines: Content → People -->
+        <line x1="295" y1="272" x2="400" y2="280" stroke="var(--blue)" stroke-width="1" opacity=".25" stroke-dasharray="4,3"/>
+        <text x="340" y="268" font-size="9" font-style="italic" fill="var(--text3)">authored</text>
+
+        <line x1="295" y1="326" x2="400" y2="334" stroke="var(--blue)" stroke-width="1" opacity=".25" stroke-dasharray="4,3"/>
+        <text x="336" y="322" font-size="9" font-style="italic" fill="var(--text3)">sent by</text>
+
+        <line x1="295" y1="380" x2="400" y2="388" stroke="var(--blue)" stroke-width="1" opacity=".25" stroke-dasharray="4,3"/>
+        <text x="335" y="397" font-size="9" font-style="italic" fill="var(--text3)">expert on</text>
+
+        <!-- Relationship lines: People → Activity -->
+        <line x1="480" y1="280" x2="620" y2="272" stroke="var(--blue)" stroke-width="1" opacity=".25" stroke-dasharray="4,3"/>
+        <text x="545" y="268" font-size="9" font-style="italic" fill="var(--text3)">attended</text>
+
+        <line x1="480" y1="334" x2="620" y2="326" stroke="var(--blue)" stroke-width="1" opacity=".25" stroke-dasharray="4,3"/>
+        <text x="543" y="322" font-size="9" font-style="italic" fill="var(--text3)">reviewed</text>
+
+        <line x1="480" y1="388" x2="620" y2="380" stroke="var(--blue)" stroke-width="1" opacity=".25" stroke-dasharray="4,3"/>
+        <text x="540" y="397" font-size="9" font-style="italic" fill="var(--text3)">presented</text>
+
+        <!-- Cross-column dashed lines -->
+        <line x1="295" y1="326" x2="620" y2="272" stroke="var(--blue)" stroke-width=".8" opacity=".12" stroke-dasharray="6,4"/>
+        <text x="445" y="292" font-size="8.5" font-style="italic" fill="var(--text3)">references</text>
+
+        <line x1="295" y1="272" x2="620" y2="380" stroke="var(--blue)" stroke-width=".8" opacity=".12" stroke-dasharray="6,4"/>
+
+        <!-- Capability badges -->
+        <g transform="translate(0,430)" font-size="10.5" font-weight="500">
+          <rect x="68" y="0" width="90" height="28" rx="14" fill="rgba(52,60,237,.06)"/><text x="113" y="19" text-anchor="middle" fill="var(--blue)">60+ Signals</text>
+          <rect x="168" y="0" width="104" height="28" rx="14" fill="rgba(52,60,237,.06)"/><text x="220" y="19" text-anchor="middle" fill="var(--blue)">Real-Time Sync</text>
+          <rect x="282" y="0" width="124" height="28" rx="14" fill="rgba(52,60,237,.06)"/><text x="344" y="19" text-anchor="middle" fill="var(--blue)">Permission-Aware</text>
+          <rect x="416" y="0" width="102" height="28" rx="14" fill="rgba(52,60,237,.06)"/><text x="467" y="19" text-anchor="middle" fill="var(--blue)">Self-Learning</text>
+          <rect x="528" y="0" width="120" height="28" rx="14" fill="rgba(52,60,237,.06)"/><text x="588" y="19" text-anchor="middle" fill="var(--blue)">Personal Context</text>
+          <rect x="658" y="0" width="144" height="28" rx="14" fill="rgba(52,60,237,.06)"/><text x="730" y="19" text-anchor="middle" fill="var(--blue)">Entity Relationships</text>
+        </g>
+
+        <!-- Divider line above badges -->
+        <line x1="60" y1="420" x2="840" y2="420" stroke="rgba(0,0,0,.06)" stroke-width="1"/>
+
+        <!-- Arrows: Graph → Applications -->
+        <line x1="200" y1="170" x2="200" y2="140" stroke="var(--blue)" stroke-width="1.5" opacity=".3" marker-end="url(#ah2)"/>
+        <line x1="450" y1="170" x2="450" y2="140" stroke="var(--blue)" stroke-width="1.5" opacity=".3" marker-end="url(#ah2)"/>
+        <line x1="700" y1="170" x2="700" y2="140" stroke="var(--blue)" stroke-width="1.5" opacity=".3" marker-end="url(#ah2)"/>
+
+        <!-- Top layer: AI Applications -->
+        <rect x="20" y="20" width="860" height="110" rx="12" fill="rgba(52,60,237,.03)" stroke="rgba(52,60,237,.12)"/>
+        <text x="40" y="50" font-size="10" font-weight="600" fill="var(--text3)" letter-spacing=".08em">AI APPLICATIONS</text>
+        <g font-size="13" font-weight="500">
+          <rect x="50" y="64" width="152" height="42" rx="21" fill="#fff" stroke="rgba(52,60,237,.18)"/><text x="126" y="90" text-anchor="middle" fill="var(--text)">Enterprise Search</text>
+          <rect x="222" y="64" width="132" height="42" rx="21" fill="#fff" stroke="rgba(52,60,237,.18)"/><text x="288" y="90" text-anchor="middle" fill="var(--text)">AI Assistant</text>
+          <rect x="374" y="64" width="142" height="42" rx="21" fill="#fff" stroke="rgba(52,60,237,.18)"/><text x="445" y="90" text-anchor="middle" fill="var(--text)">Custom Agents</text>
+          <rect x="536" y="64" width="194" height="42" rx="21" fill="#fff" stroke="rgba(52,60,237,.18)"/><text x="633" y="90" text-anchor="middle" fill="var(--text)">Workflow Automation</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="layer-explain">
+      <div class="reveal">
+        <h4>Content Layer</h4>
+        <p>Every deck, email, document, and data room — indexed, classified, and connected to the people and activities that produced it.</p>
+      </div>
+      <div class="reveal reveal-d1">
+        <h4>People Layer</h4>
+        <p>Maps who knows what, who worked on which engagement, and who the practice's real subject-matter authorities are on any given topic.</p>
+      </div>
+      <div class="reveal reveal-d2">
+        <h4>Activity Layer</h4>
+        <p>Client calls, peer reviews, workshops — captured as first-class entities so the graph understands not just what exists, but what happened.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ 4. DECISION FLOW COMPARISON ════════════════ -->
+<section>
+  <div class="container">
+    <p class="eyebrow reveal">Output Quality</p>
+    <h2 class="section-title reveal">Same question. Fundamentally different answers.</h2>
+    <p class="section-sub reveal">A side-by-side on the query: "What pricing strategies have we used for CHC brands entering LATAM markets?"</p>
+
+    <div class="flow-svg-wrap reveal">
+      <svg viewBox="0 0 880 540" xmlns="http://www.w3.org/2000/svg" font-family="'DM Sans',system-ui,sans-serif">
+        <defs>
+          <marker id="fa" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#999"/></marker>
+          <marker id="fb" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="var(--blue)"/></marker>
+          <linearGradient id="gleanTop" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="var(--blue)"/><stop offset="100%" stop-color="#34C759"/></linearGradient>
+        </defs>
+
+        <!-- Lane divider -->
+        <line x1="440" y1="10" x2="440" y2="510" stroke="rgba(0,0,0,.06)" stroke-width="1" stroke-dasharray="6,4"/>
+
+        <!-- Lane labels -->
+        <text x="220" y="30" text-anchor="middle" font-size="12" font-weight="600" fill="#999">Generic AI</text>
+        <text x="660" y="30" text-anchor="middle" font-size="12" font-weight="600" fill="var(--blue)">Glean Enterprise AI</text>
+
+        <!-- ─── LEFT LANE (Generic) ─── -->
+        <!-- Query box -->
+        <rect x="60" y="50" width="320" height="46" rx="8" fill="#F5F5F3" stroke="rgba(0,0,0,.1)"/>
+        <text x="220" y="78" text-anchor="middle" font-size="11" fill="var(--text2)" font-weight="500">🔍 "CHC pricing strategies for LATAM?"</text>
+
+        <line x1="220" y1="96" x2="220" y2="130" stroke="#bbb" stroke-width="1.2" marker-end="url(#fa)"/>
+
+        <rect x="80" y="136" width="280" height="44" rx="8" fill="#F5F5F3" stroke="rgba(0,0,0,.08)"/>
+        <text x="220" y="158" text-anchor="middle" font-size="11" fill="var(--text2)">Keyword match against</text>
+        <text x="220" y="172" text-anchor="middle" font-size="11" fill="var(--text2)">public training data</text>
+
+        <line x1="220" y1="180" x2="220" y2="220" stroke="#bbb" stroke-width="1.2" marker-end="url(#fa)"/>
+
+        <rect x="50" y="226" width="340" height="70" rx="10" fill="#EDEDEB" stroke="rgba(0,0,0,.08)"/>
+        <text x="220" y="252" text-anchor="middle" font-size="11.5" fill="var(--text2)" font-weight="500">Generic textbook answer</text>
+        <text x="220" y="270" text-anchor="middle" font-size="10.5" fill="var(--text3)">No sources · No people · No context</text>
+        <text x="220" y="286" text-anchor="middle" font-size="10.5" fill="var(--text3)">No awareness of your prior work</text>
+
+        <rect x="140" y="310" width="160" height="26" rx="13" fill="rgba(0,0,0,.05)"/>
+        <text x="220" y="328" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text3)">World knowledge only</text>
+
+        <!-- ─── RIGHT LANE (Glean) ─── -->
+        <!-- Gradient top accent -->
+        <rect x="500" y="46" width="320" height="4" rx="2" fill="url(#gleanTop)"/>
+
+        <!-- Query box -->
+        <rect x="500" y="50" width="320" height="46" rx="8" fill="rgba(52,60,237,.04)" stroke="rgba(52,60,237,.18)"/>
+        <text x="660" y="78" text-anchor="middle" font-size="11" fill="var(--text)" font-weight="500">🔍 "CHC pricing strategies for LATAM?"</text>
+
+        <line x1="660" y1="96" x2="660" y2="124" stroke="var(--blue)" stroke-width="1.2" marker-end="url(#fb)"/>
+
+        <!-- Permission Check (governance layer — wraps entire retrieval) -->
+        <rect x="530" y="130" width="260" height="34" rx="8" fill="rgba(52,60,237,.04)" stroke="rgba(52,60,237,.15)"/>
+        <text x="660" y="152" text-anchor="middle" font-size="10.5" fill="var(--text)" font-weight="500">Permission-Aware Scope Filter</text>
+
+        <line x1="660" y1="164" x2="660" y2="190" stroke="var(--blue)" stroke-width="1.2" marker-end="url(#fb)"/>
+
+        <!-- Knowledge Graph Query Engine -->
+        <rect x="530" y="196" width="260" height="38" rx="8" fill="rgba(52,60,237,.06)" stroke="rgba(52,60,237,.2)"/>
+        <text x="660" y="220" text-anchor="middle" font-size="11.5" fill="var(--blue)" font-weight="600">Knowledge Graph Query Engine</text>
+
+        <!-- Fan out -->
+        <line x1="580" y1="234" x2="540" y2="266" stroke="var(--blue)" stroke-width="1" opacity=".4" marker-end="url(#fb)"/>
+        <line x1="660" y1="234" x2="660" y2="266" stroke="var(--blue)" stroke-width="1" opacity=".4" marker-end="url(#fb)"/>
+        <line x1="740" y1="234" x2="780" y2="266" stroke="var(--blue)" stroke-width="1" opacity=".4" marker-end="url(#fb)"/>
+
+        <!-- Three parallel boxes -->
+        <rect x="468" y="272" width="148" height="58" rx="8" fill="rgba(52,60,237,.04)" stroke="rgba(52,60,237,.12)"/>
+        <text x="542" y="295" text-anchor="middle" font-size="10" font-weight="600" fill="var(--blue)">Content Matching</text>
+        <text x="542" y="310" text-anchor="middle" font-size="9.5" fill="var(--text2)">Finds 3 prior</text>
+        <text x="542" y="322" text-anchor="middle" font-size="9.5" fill="var(--text2)">engagements</text>
+
+        <rect x="624" y="272" width="134" height="58" rx="8" fill="rgba(52,60,237,.04)" stroke="rgba(52,60,237,.12)"/>
+        <text x="691" y="295" text-anchor="middle" font-size="10" font-weight="600" fill="var(--blue)">People Graph</text>
+        <text x="691" y="310" text-anchor="middle" font-size="9.5" fill="var(--text2)">Maria T. &amp; James P.</text>
+        <text x="691" y="322" text-anchor="middle" font-size="9.5" fill="var(--text2)">identified as SMEs</text>
+
+        <rect x="766" y="272" width="108" height="58" rx="8" fill="rgba(52,200,89,.06)" stroke="rgba(52,200,89,.15)"/>
+        <text x="820" y="295" text-anchor="middle" font-size="10" font-weight="600" fill="#2D8A4E">Activity Signals</text>
+        <text x="820" y="310" text-anchor="middle" font-size="9.5" fill="var(--text2)">Q3 client call,</text>
+        <text x="820" y="322" text-anchor="middle" font-size="9.5" fill="var(--text2)">peer review</text>
+
+        <!-- Converge into Personal Ranking -->
+        <line x1="542" y1="330" x2="610" y2="362" stroke="var(--blue)" stroke-width="1" opacity=".3" marker-end="url(#fb)"/>
+        <line x1="691" y1="330" x2="660" y2="362" stroke="var(--blue)" stroke-width="1" opacity=".3" marker-end="url(#fb)"/>
+        <line x1="820" y1="330" x2="710" y2="362" stroke="var(--blue)" stroke-width="1" opacity=".3" marker-end="url(#fb)"/>
+
+        <!-- Personal Ranking (post-retrieval) -->
+        <rect x="530" y="368" width="260" height="34" rx="8" fill="rgba(52,60,237,.04)" stroke="rgba(52,60,237,.12)"/>
+        <text x="660" y="390" text-anchor="middle" font-size="10.5" fill="var(--text)" font-weight="500">Personal Ranking + Context Weighting</text>
+
+        <line x1="660" y1="402" x2="660" y2="428" stroke="var(--blue)" stroke-width="1.2" marker-end="url(#fb)"/>
+
+        <!-- Output -->
+        <rect x="480" y="434" width="360" height="56" rx="10" fill="rgba(52,60,237,.06)" stroke="rgba(52,60,237,.2)"/>
+        <text x="660" y="456" text-anchor="middle" font-size="11.5" fill="var(--text)" font-weight="600">Cited, sourced answer</text>
+        <text x="660" y="472" text-anchor="middle" font-size="10.5" fill="var(--text2)">Named experts · Linked deliverables · Personally ranked</text>
+
+        <rect x="570" y="500" width="180" height="26" rx="13" fill="rgba(52,60,237,.08)"/>
+        <text x="660" y="518" text-anchor="middle" font-size="10" font-weight="600" fill="var(--blue)">Enterprise knowledge graph</text>
+      </svg>
+    </div>
+
+    <div class="comparison-text">
+      <div class="col generic reveal">
+        <h4>Generic AI output</h4>
+        <p>"Common pricing strategies for consumer health brands entering Latin American markets include tiered pricing, penetration pricing, and value-based pricing. Companies should consider local purchasing power, regulatory requirements, and competitive dynamics…"</p>
+        <p style="font-size:.82rem;color:var(--text3);margin-top:8px">No sources. No awareness that your team ran this exact play twice last year.</p>
+      </div>
+      <div class="col glean reveal reveal-d1">
+        <h4>Glean output</h4>
+        <p>"Your team used a tiered access-pricing model for the NovaBrand LATAM launch (Q2 2025, led by Maria T.). The peer-reviewed deck is in the CHC SharePoint. James P. ran a similar engagement in Brazil for AcmePharma using penetration pricing with pharmacy-chain incentives. Three related deliverables are linked below."</p>
+        <p style="font-size:.82rem;color:var(--blue);margin-top:8px">Cited. Named. Linked. Ready to act on.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ 5. USE CASES ════════════════ -->
+<section style="background:#fff">
+  <div class="container">
+    <p class="eyebrow reveal">Use Cases</p>
+    <h2 class="section-title reveal">Where this changes the economics of your practice.</h2>
+    <p class="section-sub reveal">Four capabilities, each with measurable impact on margin and velocity.</p>
+
+    <div class="accordion">
+      <div class="acc-card reveal" data-acc>
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><div class="acc-label">Intelligence</div><div class="acc-title">Advisory Intelligence — Instant access to every prior engagement</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="acc-body"><div class="acc-body-inner">
+          <p>New team members and lateral hires ramp by searching, not asking. Every deliverable, client interaction, and expert relationship is queryable in seconds — across offices, time zones, and legacy systems.</p>
+          <div class="metric-row">
+            <div class="metric"><strong>30–40%</strong><span>Faster analyst ramp time</span></div>
+            <div class="metric"><strong>100+</strong><span>Sources indexed per practice</span></div>
+          </div>
+        </div></div>
+      </div>
+      <div class="acc-card reveal reveal-d1" data-acc>
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div><div class="acc-label">Deliverables</div><div class="acc-title">Client Deliverables — Compress data to client-ready insight</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="acc-body"><div class="acc-body-inner">
+          <p>Analysts spend less time assembling and more time thinking. Glean surfaces prior frameworks, data tables, and relevant benchmarks — pre-filtered by the engagement context and your team's own quality bar.</p>
+          <div class="metric-row">
+            <div class="metric"><strong>60%</strong><span>Less assembly time</span></div>
+            <div class="metric"><strong>Higher-margin</strong><span>Hours per engagement</span></div>
+          </div>
+        </div></div>
+      </div>
+      <div class="acc-card reveal reveal-d2" data-acc>
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><div class="acc-label">Growth</div><div class="acc-title">Practice Growth — Scale expertise without scaling headcount</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="acc-body"><div class="acc-body-inner">
+          <p>Enter new therapeutic areas and geographies faster by leveraging what the broader practice already knows. The knowledge graph makes adjacent expertise visible and actionable — no hallway conversations required.</p>
+          <div class="metric-row">
+            <div class="metric"><strong>2×</strong><span>Faster new-segment ramp</span></div>
+            <div class="metric"><strong>More</strong><span>Mandate capacity per partner</span></div>
+          </div>
+        </div></div>
+      </div>
+      <div class="acc-card reveal reveal-d3" data-acc>
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><div class="acc-label">Edge</div><div class="acc-title">Competitive Edge — AI-powered advisory, not AI as a buzzword</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="acc-body"><div class="acc-body-inner">
+          <p>Clients increasingly expect their advisors to operate with the same AI infrastructure they're being told to adopt. Glean makes AI a visible, defensible part of your methodology — not a slide in a capabilities deck.</p>
+          <div class="metric-row">
+            <div class="metric"><strong>Higher</strong><span>Win-rate on competitive bids</span></div>
+            <div class="metric"><strong>Higher</strong><span>Client NPS</span></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ 6. WHY THIS IS DIFFERENT ════════════════ -->
+<section>
+  <div class="container">
+    <p class="eyebrow reveal">Why This Is Different</p>
+    <h2 class="section-title reveal">Not another enterprise search tool.</h2>
+    <div class="diff-grid">
+      <div class="diff-col trad reveal">
+        <h3>Traditional Approach</h3>
+        <div class="diff-item">
+          <svg width="16" height="16" viewBox="0 0 16 16"><line x1="3" y1="8" x2="13" y2="8" stroke="#999" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>6–12 month implementation with heavy IT lift and custom taxonomy work</span>
+        </div>
+        <div class="diff-item">
+          <svg width="16" height="16" viewBox="0 0 16 16"><line x1="3" y1="8" x2="13" y2="8" stroke="#999" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Single-ecosystem lock-in — works with Microsoft or Google, rarely both</span>
+        </div>
+        <div class="diff-item">
+          <svg width="16" height="16" viewBox="0 0 16 16"><line x1="3" y1="8" x2="13" y2="8" stroke="#999" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Generic keyword results with no understanding of who, when, or why</span>
+        </div>
+        <div class="diff-item">
+          <svg width="16" height="16" viewBox="0 0 16 16"><line x1="3" y1="8" x2="13" y2="8" stroke="#999" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Owned by IT — business teams wait in queue for changes</span>
+        </div>
+      </div>
+      <div class="diff-col glean reveal reveal-d1">
+        <h3>Glean Enterprise AI</h3>
+        <div class="diff-item">
+          <svg width="16" height="16" viewBox="0 0 16 16"><polyline points="3,8 6.5,11.5 13,4.5" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Deployed in weeks. Pre-built connectors, no manual taxonomy required.</span>
+        </div>
+        <div class="diff-item">
+          <svg width="16" height="16" viewBox="0 0 16 16"><polyline points="3,8 6.5,11.5 13,4.5" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>100+ connectors across every major platform — cloud-agnostic by design.</span>
+        </div>
+        <div class="diff-item">
+          <svg width="16" height="16" viewBox="0 0 16 16"><polyline points="3,8 6.5,11.5 13,4.5" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Practice-aware learning: the graph gets smarter as your team works, not just as IT configures.</span>
+        </div>
+        <div class="diff-item">
+          <svg width="16" height="16" viewBox="0 0 16 16"><polyline points="3,8 6.5,11.5 13,4.5" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Business-team ownership. Partners and practice leads control what matters — no IT dependency.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ 7. ENTERPRISE PROOF POINTS ════════════════ -->
+<section style="background:#fff">
+  <div class="container">
+    <p class="eyebrow reveal">Enterprise Proof Points</p>
+    <h2 class="section-title reveal">This isn't early innings. It's at scale.</h2>
+    <div class="proof-grid">
+      <div class="proof-card reveal">
+        <div class="num">$200M+</div>
+        <div class="label">ARR (Glean press release, 2026)</div>
+      </div>
+      <div class="proof-card reveal reveal-d1">
+        <div class="num">111K+</div>
+        <div class="label">MAU at a single Fortune 50 (T-Mobile)</div>
+      </div>
+      <div class="proof-card reveal reveal-d2">
+        <div class="num">93%</div>
+        <div class="label">Active usage after 2 years (Forrester TEI)</div>
+      </div>
+      <div class="proof-card reveal reveal-d3">
+        <div class="num">2 eng.</div>
+        <div class="label">vs. 50 at top-5 pharma (GSK)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ 8. CTA ════════════════ -->
+<section class="cta-section">
+  <div class="cta-line reveal"></div>
+  <h2 class="reveal">Worth a deeper conversation?</h2>
+  <p class="reveal reveal-d1">The right next step is a focused 45-minute working session — your data landscape, your use cases, your constraints. No pitch deck. Just a structured conversation about what this could look like inside CHC Advisory.</p>
+</section>
+
+<script>
+// Scroll reveal
+const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Accordion
+function toggleAcc(header){
+  const card=header.parentElement;
+  const wasActive=card.classList.contains('active');
+  document.querySelectorAll('.acc-card.active').forEach(c=>c.classList.remove('active'));
+  if(!wasActive)card.classList.add('active');
+}
+</script>
+</body>
+</html>
